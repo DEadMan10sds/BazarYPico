@@ -8,14 +8,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ChangePasswordWidget extends StatefulWidget {
-  const ChangePasswordWidget({Key? key}) : super(key: key);
+class AddBazaarWidget extends StatefulWidget {
+  const AddBazaarWidget({Key? key}) : super(key: key);
 
   @override
-  _ChangePasswordWidgetState createState() => _ChangePasswordWidgetState();
+  _AddBazaarWidgetState createState() => _AddBazaarWidgetState();
 }
 
-class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
+class _AddBazaarWidgetState extends State<AddBazaarWidget>
     with TickerProviderStateMixin {
   final animationsMap = {
     'buttonOnPageLoadAnimation': AnimationInfo(
@@ -93,7 +93,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
           },
         ),
         title: Text(
-          'Cambiar contraseña',
+          'Crear nuevo bazar',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Raleway',
                 color: Colors.white,
@@ -114,6 +114,48 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 3),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 250,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFACACAC),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                buttonSize: 48,
+                                icon: Icon(
+                                  Icons.photo_camera,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  print('IconButton pressed ...');
+                                },
+                              ),
+                              Text(
+                                'Añadir portada',
+                                style: GoogleFonts.getFont(
+                                  'Raleway',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: Row(
@@ -130,12 +172,25 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
+                                  child: Text(
+                                    'Datos de bazar',
+                                    style: FlutterFlowTheme.of(context)
+                                        .title1
+                                        .override(
+                                          fontFamily: 'Raleway',
+                                          color: Color(0xFF2C2C2C),
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 20),
                                   child: TextFormField(
                                     controller: textController1,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Nueva contraseña',
-                                      hintText: 'Nueva contraseña',
+                                      labelText: 'Nombre de bazar',
+                                      hintText: 'Ingresa tu nombre',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -175,7 +230,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(
-                                        Icons.lock_outlined,
+                                        Icons.info_outlined,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryColor,
                                       ),
@@ -186,13 +241,13 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 40),
+                                      0, 0, 0, 20),
                                   child: TextFormField(
                                     controller: textController2,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Repetir nuva contraseña',
-                                      hintText: 'Nueva contraseña',
+                                      labelText: 'Descripción',
+                                      hintText: 'Tipo de bazar',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -232,14 +287,15 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(
-                                        Icons.lock_outlined,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryColor,
+                                        Icons.notes,
+                                        color: Color(0xFF0F596B),
+                                        size: 0,
                                       ),
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
-                                    keyboardType: TextInputType.emailAddress,
+                                    maxLines: 5,
+                                    keyboardType: TextInputType.multiline,
                                   ),
                                 ),
                                 Padding(
@@ -249,17 +305,18 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget>
                                     onPressed: () {
                                       print('Button pressed ...');
                                     },
-                                    text: 'Guardar',
+                                    text: 'Crear bazar',
                                     options: FFButtonOptions(
-                                      width: 300,
+                                      width: 350,
                                       height: 45,
                                       color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
+                                          .secondaryColor,
                                       textStyle: FlutterFlowTheme.of(context)
                                           .subtitle2
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Colors.white,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBtnText,
                                           ),
                                       elevation: 3,
                                       borderSide: BorderSide(

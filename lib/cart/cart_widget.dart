@@ -1,11 +1,8 @@
-import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartWidget extends StatefulWidget {
@@ -15,48 +12,9 @@ class CartWidget extends StatefulWidget {
   _CartWidgetState createState() => _CartWidgetState();
 }
 
-class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
-  final animationsMap = {
-    'buttonOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: 0,
-          end: 1,
-        ),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: Offset(0, 64),
-          end: Offset(0, 0),
-        ),
-        ScaleEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: 1,
-          end: 1,
-        ),
-      ],
-    ),
-  };
+class _CartWidgetState extends State<CartWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int? countControllerValue;
-
-  @override
-  void initState() {
-    super.initState();
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +22,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: Color(0xFF32546D),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         title: Text(
           'Carrito',
@@ -83,7 +41,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(1, 8, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(1, 0, 0, 0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -96,7 +54,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.93,
+                            width: MediaQuery.of(context).size.width * 0.96,
                             height: 120,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
@@ -154,8 +112,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                               .subtitle1
                                               .override(
                                                 fontFamily: 'Raleway',
-                                                color: Color(0xFF32546D),
-                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF2C2C2C),
                                               ),
                                         ),
                                         Text(
@@ -163,9 +120,8 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1
                                               .override(
-                                                fontFamily: 'Poppins',
-                                                color: Color(0xFF80A7B8),
-                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Raleway',
+                                                color: Color(0xFF2C2C2C),
                                               ),
                                         ),
                                         Padding(
@@ -203,15 +159,17 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                                         ? FlutterFlowTheme.of(
                                                                 context)
                                                             .primaryText
-                                                        : Color(0xFFB3C5D2),
+                                                        : Color(0xFF656565),
                                                     size: 20,
                                                   ),
                                                   incrementIconBuilder:
                                                       (enabled) => Icon(
                                                     Icons.add_rounded,
                                                     color: enabled
-                                                        ? Color(0xFFF3485B)
-                                                        : Color(0xFFB3C5D2),
+                                                        ? FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondaryColor
+                                                        : Color(0xFF656565),
                                                     size: 20,
                                                   ),
                                                   countBuilder: (count) => Text(
@@ -237,8 +195,9 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                                         .subtitle1
                                                         .override(
                                                           fontFamily: 'Raleway',
-                                                          color:
-                                                              Color(0xFF302C60),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryColor,
                                                         ),
                                               ),
                                             ],
@@ -257,7 +216,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.93,
+                        width: MediaQuery.of(context).size.width * 0.96,
                         decoration: BoxDecoration(
                           color:
                               FlutterFlowTheme.of(context).secondaryBackground,
@@ -286,7 +245,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: Color(0xFF2C2C2C),
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -308,7 +267,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .bodyText2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: Color(0xFF2C2C2C),
                                         ),
                                   ),
                                   Text(
@@ -318,7 +277,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: Color(0xFF2C2C2C),
                                         ),
                                   ),
                                 ],
@@ -338,7 +297,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .bodyText2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C62),
+                                          color: Color(0xFF2C2C2C),
                                         ),
                                   ),
                                   Text(
@@ -348,7 +307,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: Color(0xFF2C2C2C),
                                         ),
                                   ),
                                 ],
@@ -368,7 +327,7 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .bodyText2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: Color(0xFF2C2C2C),
                                         ),
                                   ),
                                   Text(
@@ -378,7 +337,8 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                                         .title2
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF302C60),
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
                                         ),
                                   ),
                                 ],
@@ -395,35 +355,28 @@ class _CartWidgetState extends State<CartWidget> with TickerProviderStateMixin {
                       endIndent: 16,
                       color: Colors.transparent,
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(-0.05, 0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
-                        child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                          },
-                          text: 'Realizar Compra',
-                          options: FFButtonOptions(
-                            width: 350,
-                            height: 45,
-                            color: Color(0xFFF3485B),
-                            textStyle:
-                                FlutterFlowTheme.of(context).subtitle2.override(
-                                      fontFamily: 'Raleway',
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                            elevation: 3,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(50),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          print('Button pressed ...');
+                        },
+                        text: 'Realizar compra',
+                        options: FFButtonOptions(
+                          width: 350,
+                          height: 45,
+                          color: FlutterFlowTheme.of(context).secondaryColor,
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Raleway',
+                                    color: Colors.white,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
                           ),
-                        ).animateOnPageLoad(
-                            animationsMap['buttonOnPageLoadAnimation']!),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
                     ),
                   ],

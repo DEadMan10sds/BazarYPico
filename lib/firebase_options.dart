@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyArnPBwNX4tEQWWcxOQII36c-6KH-4jzPU',
-    appId: '1:659328514030:android:5b99c584b88ec30f4900ff',
+    appId: '1:659328514030:android:a6a446efc1ea37594900ff',
     messagingSenderId: '659328514030',
     projectId: 'bazarypico',
     databaseURL: 'https://bazarypico-default-rtdb.firebaseio.com',

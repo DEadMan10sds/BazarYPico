@@ -20,11 +20,13 @@ class UsersCrud {
   }) async {
     Response response = Response();
       DocumentReference documentReferencer = _Collection.doc();
-
+      //print(password);
+      var hashedPassword = Crypt.sha256(password);
+      //print(hashedPassword.toString());
       Map<String, dynamic> data = <String, dynamic>{
         'name': name,
         'email': email,
-        'password': password,
+        'password': hashedPassword.toString(),
         'phone': phone,
       };
 
@@ -52,12 +54,13 @@ class UsersCrud {
     print(existsEmail.docs.length);
       if(existsEmail.docs.isEmpty || existsPhone.docs.isEmpty)
       {
+
         var result = await documentReferencer.set(data).whenComplete( (){
           response.code = 200;
           response.message = "Registration complete";
         }).catchError((e){
           response.code = 500;
-          response.message = e;
+          response.message = e.toString();
         });
         return response;
       }

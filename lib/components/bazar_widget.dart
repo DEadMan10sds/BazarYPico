@@ -1,9 +1,5 @@
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/random_data_util.dart' as random_data;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BazarWidget extends StatefulWidget {
   const BazarWidget({Key? key}) : super(key: key);
@@ -47,10 +43,7 @@ class _BazarWidgetState extends State<BazarWidget> {
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                     child: Text(
-                      random_data.randomName(true, false).maybeHandleOverflow(
-                            maxChars: 36,
-                            replacement: '…',
-                          ),
+                      'pa',
                       style: FlutterFlowTheme.of(context).title3.override(
                             fontFamily: 'Raleway',
                             color: Color(0xFF32546D),

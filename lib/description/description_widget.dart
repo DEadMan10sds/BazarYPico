@@ -20,47 +20,8 @@ class DescriptionWidget extends StatefulWidget {
 
 class _DescriptionWidgetState extends State<DescriptionWidget>
     with TickerProviderStateMixin {
-  final animationsMap = {
-    'buttonOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: 0,
-          end: 1,
-        ),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: Offset(0, 64),
-          end: Offset(0, 0),
-        ),
-        ScaleEffect(
-          curve: Curves.easeInOut,
-          delay: 250.ms,
-          duration: 600.ms,
-          begin: 1,
-          end: 1,
-        ),
-      ],
-    ),
-  };
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int? countControllerValue;
-
-  @override
-  void initState() {
-    super.initState();
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +29,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       appBar: AppBar(
-        backgroundColor: Color(0xFF32546D),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -80,7 +41,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
             size: 30,
           ),
           onPressed: () async {
-            context.pop();
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -88,7 +49,6 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Raleway',
                 color: Colors.white,
-                fontSize: 20,
               ),
         ),
         actions: [],
@@ -160,7 +120,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
                           '[Producto]',
                           style: FlutterFlowTheme.of(context).title2.override(
                                 fontFamily: 'Raleway',
-                                color: Color(0xFF32546D),
+                                color: Color(0xFF2C2C2C),
                               ),
                         ),
                         Text(
@@ -183,7 +143,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
                           style:
                               FlutterFlowTheme.of(context).bodyText2.override(
                                     fontFamily: 'Raleway',
-                                    color: Color(0xFF80A7B8),
+                                    color: Color(0xFF2C2C2C),
                                   ),
                         ),
                       ],
@@ -199,9 +159,7 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
                           style:
                               FlutterFlowTheme.of(context).bodyText1.override(
                                     fontFamily: 'Raleway',
-                                    color: Color(0xFF32546D),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.bold,
                                   ),
                         ),
                       ],
@@ -218,106 +176,84 @@ class _DescriptionWidgetState extends State<DescriptionWidget>
                             style:
                                 FlutterFlowTheme.of(context).bodyText2.override(
                                       fontFamily: 'Raleway',
-                                      color: Color(0xFF80A7B8),
-                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF2C2C2C),
                                     ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: AlignmentDirectional(-0.05, 0),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20, 60, 20, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0.15, 0),
-                            child: Text(
-                              'Cantidad',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyText2
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: Color(0xFF32546D),
-                                  ),
-                            ),
-                          ),
-                          Container(
-                            width: 130,
-                            height: 40,
-                            decoration: BoxDecoration(
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cantidad',
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                        Container(
+                          width: 130,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            borderRadius: BorderRadius.circular(8),
+                            shape: BoxShape.rectangle,
+                            border: Border.all(
                               color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              borderRadius: BorderRadius.circular(8),
-                              shape: BoxShape.rectangle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
-                                width: 1,
-                              ),
-                            ),
-                            child: FlutterFlowCountController(
-                              decrementIconBuilder: (enabled) => Icon(
-                                Icons.remove_rounded,
-                                color: enabled
-                                    ? FlutterFlowTheme.of(context).primaryText
-                                    : Color(0xFFB3C5D2),
-                                size: 20,
-                              ),
-                              incrementIconBuilder: (enabled) => Icon(
-                                Icons.add_rounded,
-                                color: enabled
-                                    ? Color(0xFFF3485B)
-                                    : Color(0xFFB3C5D2),
-                                size: 20,
-                              ),
-                              countBuilder: (count) => Text(
-                                count.toString(),
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                              count: countControllerValue ??= 0,
-                              updateCount: (count) =>
-                                  setState(() => countControllerValue = count),
-                              stepSize: 1,
+                                  .primaryBackground,
+                              width: 1,
                             ),
                           ),
-                        ],
-                      ),
+                          child: FlutterFlowCountController(
+                            decrementIconBuilder: (enabled) => Icon(
+                              Icons.remove_rounded,
+                              color: enabled
+                                  ? FlutterFlowTheme.of(context).primaryText
+                                  : Color(0xFF565656),
+                              size: 20,
+                            ),
+                            incrementIconBuilder: (enabled) => Icon(
+                              Icons.add_rounded,
+                              color: enabled
+                                  ? FlutterFlowTheme.of(context).secondaryColor
+                                  : Color(0xFF565656),
+                              size: 20,
+                            ),
+                            countBuilder: (count) => Text(
+                              count.toString(),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                            ),
+                            count: countControllerValue ??= 0,
+                            updateCount: (count) =>
+                                setState(() => countControllerValue = count),
+                            stepSize: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Align(
-                    alignment: AlignmentDirectional(-0.05, 0),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 20),
-                      child: FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
-                        },
-                        text: 'Añadir al Carrito',
-                        options: FFButtonOptions(
-                          width: 350,
-                          height: 45,
-                          color: Color(0xFFF3485B),
-                          textStyle:
-                              FlutterFlowTheme.of(context).subtitle2.override(
-                                    fontFamily: 'Raleway',
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                          elevation: 3,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ).animateOnPageLoad(
-                          animationsMap['buttonOnPageLoadAnimation']!),
+                  FFButtonWidget(
+                    onPressed: () {
+                      print('Button pressed ...');
+                    },
+                    text: 'Añadir al carrito',
+                    options: FFButtonOptions(
+                      width: 350,
+                      height: 45,
+                      color: FlutterFlowTheme.of(context).secondaryColor,
+                      textStyle:
+                          FlutterFlowTheme.of(context).subtitle2.override(
+                                fontFamily: 'Raleway',
+                                color: Colors.white,
+                              ),
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
                 ],

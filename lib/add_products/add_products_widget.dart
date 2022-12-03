@@ -8,14 +8,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class EditProfileWidget extends StatefulWidget {
-  const EditProfileWidget({Key? key}) : super(key: key);
+class AddProductsWidget extends StatefulWidget {
+  const AddProductsWidget({Key? key}) : super(key: key);
 
   @override
-  _EditProfileWidgetState createState() => _EditProfileWidgetState();
+  _AddProductsWidgetState createState() => _AddProductsWidgetState();
 }
 
-class _EditProfileWidgetState extends State<EditProfileWidget>
+class _AddProductsWidgetState extends State<AddProductsWidget>
     with TickerProviderStateMixin {
   final animationsMap = {
     'buttonOnPageLoadAnimation': AnimationInfo(
@@ -48,6 +48,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   TextEditingController? textController1;
   TextEditingController? textController2;
   TextEditingController? textController3;
+  TextEditingController? textController4;
+  TextEditingController? textController5;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -64,6 +66,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     textController1 = TextEditingController();
     textController2 = TextEditingController();
     textController3 = TextEditingController();
+    textController4 = TextEditingController();
+    textController5 = TextEditingController();
   }
 
   @override
@@ -71,6 +75,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     textController1?.dispose();
     textController2?.dispose();
     textController3?.dispose();
+    textController4?.dispose();
+    textController5?.dispose();
     super.dispose();
   }
 
@@ -96,7 +102,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           },
         ),
         title: Text(
-          'Editar perfil',
+          'Añadir producto',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Raleway',
                 color: Colors.white,
@@ -117,6 +123,48 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 3),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 250,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFACACAC),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                buttonSize: 48,
+                                icon: Icon(
+                                  Icons.photo_camera,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  print('IconButton pressed ...');
+                                },
+                              ),
+                              Text(
+                                'Añadir portada',
+                                style: GoogleFonts.getFont(
+                                  'Raleway',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: Row(
@@ -133,12 +181,25 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
+                                  child: Text(
+                                    'Datos de producto',
+                                    style: FlutterFlowTheme.of(context)
+                                        .title1
+                                        .override(
+                                          fontFamily: 'Raleway',
+                                          color: Color(0xFF2C2C2C),
+                                        ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 20),
                                   child: TextFormField(
                                     controller: textController1,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Nombre completo',
-                                      hintText: 'Ingresa tu nombre',
+                                      labelText: 'Nombre de producto',
+                                      hintText: 'producto',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -178,7 +239,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(
-                                        Icons.emoji_emotions_outlined,
+                                        Icons.info_outlined,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryColor,
                                       ),
@@ -194,8 +255,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                     controller: textController2,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Teléfono',
-                                      hintText: 'Ingresa tu teléfono',
+                                      labelText: 'Categoría',
+                                      hintText: 'cateoria',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -235,14 +296,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(
-                                        Icons.phone_in_talk_rounded,
+                                        Icons.format_list_bulleted,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryColor,
                                       ),
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
-                                    keyboardType: TextInputType.phone,
                                   ),
                                 ),
                                 Padding(
@@ -252,8 +312,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                     controller: textController3,
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Correo electrónico',
-                                      hintText: 'Ingresa tu correo',
+                                      labelText: 'Precio',
+                                      hintText: 'Precio',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
@@ -293,14 +353,139 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                       filled: true,
                                       fillColor: Colors.white,
                                       prefixIcon: Icon(
-                                        Icons.email_outlined,
+                                        Icons.attach_money_sharp,
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryColor,
                                       ),
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
-                                    keyboardType: TextInputType.emailAddress,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            signed: true, decimal: true),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 20),
+                                  child: TextFormField(
+                                    controller: textController4,
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Stock',
+                                      hintText: 'Stock',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBtnText,
+                                      prefixIcon: Icon(
+                                        Icons.store,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryColor,
+                                      ),
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Raleway',
+                                          color: FlutterFlowTheme.of(context)
+                                              .black600,
+                                        ),
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 20),
+                                  child: TextFormField(
+                                    controller: textController5,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Descripción',
+                                      hintText: 'Tipo de bazar',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Raleway',
+                                            color: Color(0x9AFFFFFF),
+                                          ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryColor,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFFF0000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0xFFFF0000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: Icon(
+                                        Icons.notes,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryColor,
+                                        size: 0,
+                                      ),
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyText1,
+                                    maxLines: 5,
+                                    keyboardType: TextInputType.multiline,
                                   ),
                                 ),
                                 Padding(
@@ -310,9 +495,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                     onPressed: () {
                                       print('Button pressed ...');
                                     },
-                                    text: 'Guardar',
+                                    text: 'Crear producto',
                                     options: FFButtonOptions(
-                                      width: 300,
+                                      width: 350,
                                       height: 45,
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryColor,
@@ -320,7 +505,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                           .subtitle2
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Colors.white,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBtnText,
                                           ),
                                       elevation: 3,
                                       borderSide: BorderSide(

@@ -1,6 +1,8 @@
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../login/login_widget.dart';
+import '../register/register_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,7 +18,8 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        child: Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
@@ -25,7 +28,7 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 1,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFF32546D),
             ),
             child: Padding(
@@ -68,7 +71,7 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
-                                    fontFamily: 'Poppins',
+                                    fontFamily: 'Raleway',
                                     color: Color(0xFFF8EEED),
                                     fontSize: 22,
                                     fontWeight: FontWeight.w500,
@@ -80,7 +83,12 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                                 EdgeInsetsDirectional.fromSTEB(0, 2, 0, 15),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    context.pushNamed('Login');
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginWidget(),
+                                      ),
+                                    );
                                   },
                                   text: 'Iniciar Sesión',
                                   options: FFButtonOptions(
@@ -109,7 +117,12 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
                                 EdgeInsetsDirectional.fromSTEB(0, 2, 0, 20),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    context.pushNamed('Register');
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RegisterWidget(),
+                                      ),
+                                    );
                                   },
                                   text: 'Registrarse',
                                   options: FFButtonOptions(
@@ -146,6 +159,8 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
           ),
         ),
       ),
+    ),
+        onWillPop: () => Future.value(false)
     );
   }
 }

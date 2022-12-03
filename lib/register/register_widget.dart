@@ -1,16 +1,14 @@
-import 'package:bazar_y_pico/locator.dart';
+import 'package:bazar_y_pico/Services/users_service.dart';
 
-import '../Services/Auth_service.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../login/login_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
-import 'package:crypt/crypt.dart';
-
-import '../Services/users_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({Key? key}) : super(key: key);
@@ -21,8 +19,6 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget>
     with TickerProviderStateMixin {
-  //final _name = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final animationsMap = {
     'buttonOnPageLoadAnimation1': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -91,7 +87,7 @@ class _RegisterWidgetState extends State<RegisterWidget>
     super.initState();
     setupAnimations(
       animationsMap.values.where((anim) =>
-      anim.trigger == AnimationTrigger.onActionTrigger ||
+          anim.trigger == AnimationTrigger.onActionTrigger ||
           !anim.applyInitialState),
       this,
     );
@@ -142,7 +138,7 @@ class _RegisterWidgetState extends State<RegisterWidget>
                           ),
                           child: Padding(
                             padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 40),
+                                const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 40),
                             child: Image.asset(
                               'assets/images/LOGO.png',
                               width: 100,
@@ -163,7 +159,7 @@ class _RegisterWidgetState extends State<RegisterWidget>
                         Expanded(
                           child: Padding(
                             padding:
-                            const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                                const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -175,11 +171,11 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .title1
                                         .override(
-                                      fontFamily: 'Raleway',
-                                      color: const Color(0xFFF3485B),
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFFF3485B),
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                                 Padding(
@@ -194,9 +190,9 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0x9AFFFFFF),
-                                      ),
+                                            fontFamily: 'Raleway',
+                                            color: const Color(0x9AFFFFFF),
+                                          ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: Color(0xFFF3485B),
@@ -235,10 +231,10 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                      fontFamily: 'Raleway',
-                                      color: const Color(0xFFF3485B),
-                                      fontSize: 18,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFFF3485B),
+                                          fontSize: 18,
+                                        ),
                                   ),
                                 ),
                                 Padding(
@@ -253,9 +249,9 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0x9AFFFFFF),
-                                      ),
+                                            fontFamily: 'Raleway',
+                                            color: const Color(0x9AFFFFFF),
+                                          ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: Color(0xFFF3485B),
@@ -294,10 +290,10 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                      fontFamily: 'Raleway',
-                                      color: const Color(0xFFF3485B),
-                                      fontSize: 18,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFFF3485B),
+                                          fontSize: 18,
+                                        ),
                                     keyboardType: TextInputType.phone,
                                   ),
                                 ),
@@ -313,9 +309,9 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0x9AFFFFFF),
-                                      ),
+                                            fontFamily: 'Raleway',
+                                            color: const Color(0x9AFFFFFF),
+                                          ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: Color(0xFFF3485B),
@@ -354,10 +350,10 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                      fontFamily: 'Raleway',
-                                      color: const Color(0xFFF3485B),
-                                      fontSize: 18,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFFF3485B),
+                                          fontSize: 18,
+                                        ),
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                 ),
@@ -373,9 +369,9 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
-                                        fontFamily: 'Poppins',
-                                        color: const Color(0x9AFFFFFF),
-                                      ),
+                                            fontFamily: 'Raleway',
+                                            color: const Color(0x9AFFFFFF),
+                                          ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
                                           color: Color(0xFFF3485B),
@@ -412,11 +408,11 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                       ),
                                       suffixIcon: InkWell(
                                         onTap: () => setState(
-                                              () => passwordVisibility =
-                                          !passwordVisibility,
+                                          () => passwordVisibility =
+                                              !passwordVisibility,
                                         ),
                                         focusNode:
-                                        FocusNode(skipTraversal: true),
+                                            FocusNode(skipTraversal: true),
                                         child: Icon(
                                           passwordVisibility
                                               ? Icons.visibility_outlined
@@ -429,10 +425,10 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                      fontFamily: 'Raleway',
-                                      color: const Color(0xFFF3485B),
-                                      fontSize: 18,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFFF3485B),
+                                          fontSize: 18,
+                                        ),
                                   ),
                                 ),
                                 Align(
@@ -442,26 +438,41 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         0, 0, 0, 20),
                                     child: FFButtonWidget(
                                       onPressed:  () async {
-                                        var response = await UsersCrud.addUser(
-                                            name: _name!.text,
-                                            email: _email!.text,
-                                            password: Crypt.sha256(_password!.text).toString(),
-                                            phone: _phone!.text,
-                                          );
-                                        if(response.code != 200 )
-                                          {
-                                             return showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    content: Text(response.message.toString()),
-                                                  );
-                                                });
-                                          }
-                                        //locator.get<AuthService>().setAuthenticated(true);
-                                        //print(authService);
-                                        //print(locator.get<AuthService>().authenticated);
-                                        context.pushNamed('Login');
+                                        if(_name?.text == null || _email?.text == null || _phone?.text == null || _password?.text == null)
+                                        {
+                                          return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return const AlertDialog(
+                                                  content: Text('No puedes reguistrar campos vacíos'),
+                                                );
+                                              });
+                                        }
+                                        var response = await UsersCrud.addUser(name: _name!.text, email: _email!.text, password: _password!.text, phone: _phone!.text);
+                                        if(response.code != 200)
+                                        {
+                                          // ignore: use_build_context_synchronously
+                                          return showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Text(response.message.toString()),
+                                                );
+                                              });
+                                        }
+                                        // ignore: use_build_context_synchronously
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            duration:
+                                            const Duration(milliseconds: 500),
+                                            reverseDuration:
+                                            const Duration(milliseconds: 500),
+                                            child: const LoginWidget(),
+                                          ),
+                                        );
+                                        //print('Button pressed ...');
                                       },
                                       text: 'Registrarme',
                                       options: FFButtonOptions(
@@ -471,11 +482,11 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         textStyle: FlutterFlowTheme.of(context)
                                             .subtitle2
                                             .override(
-                                          fontFamily: 'Raleway',
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                              fontFamily: 'Raleway',
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                         elevation: 3,
                                         borderSide: const BorderSide(
                                           color: Colors.transparent,
@@ -484,7 +495,7 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         borderRadius: BorderRadius.circular(50),
                                       ),
                                     ).animateOnPageLoad(animationsMap[
-                                    'buttonOnPageLoadAnimation1']!),
+                                        'buttonOnPageLoadAnimation1']!),
                                   ),
                                 ),
                                 Padding(
@@ -495,10 +506,10 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                      fontFamily: 'Poppins',
-                                      color: const Color(0xFF32546D),
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                          fontFamily: 'Raleway',
+                                          color: const Color(0xFF32546D),
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                   ),
                                 ),
                                 Align(
@@ -508,17 +519,16 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         0, 0, 0, 20),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        context.pushNamed(
-                                          'Login',
-                                          extra: <String, dynamic>{
-                                            kTransitionInfoKey: const TransitionInfo(
-                                              hasTransition: true,
-                                              transitionType:
-                                              PageTransitionType.fade,
-                                              duration:
-                                              Duration(milliseconds: 500),
-                                            ),
-                                          },
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            duration:
+                                                const Duration(milliseconds: 500),
+                                            reverseDuration:
+                                                const Duration(milliseconds: 500),
+                                            child: const LoginWidget(),
+                                          ),
                                         );
                                       },
                                       text: 'Iniciar Sesion',
@@ -529,13 +539,13 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         textStyle: FlutterFlowTheme.of(context)
                                             .subtitle2
                                             .override(
-                                          fontFamily: 'Raleway',
-                                          color:
-                                          FlutterFlowTheme.of(context)
-                                              .primaryBtnText,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                              fontFamily: 'Raleway',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBtnText,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                         elevation: 3,
                                         borderSide: const BorderSide(
                                           color: Color(0xFF32546D),
@@ -544,7 +554,7 @@ class _RegisterWidgetState extends State<RegisterWidget>
                                         borderRadius: BorderRadius.circular(50),
                                       ),
                                     ).animateOnPageLoad(animationsMap[
-                                    'buttonOnPageLoadAnimation2']!),
+                                        'buttonOnPageLoadAnimation2']!),
                                   ),
                                 ),
                               ],
