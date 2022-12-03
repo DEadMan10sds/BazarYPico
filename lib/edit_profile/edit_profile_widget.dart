@@ -67,7 +67,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
-  var storageRef;
+  late var storageRef;
+  late var newImage = null;
   late var urlUserImage = '';
   File? photo;
   final ImagePicker _picker = ImagePicker();
@@ -125,7 +126,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
       await ref.putFile(photo!);
       var download = await ref.getDownloadURL();
-      storageRef = download.toString();
+      newImage = download.toString();
+      print(newImage);
     } catch (e) {
       print('error occured');
     }
@@ -138,6 +140,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     _phone = TextEditingController(text: currentUser.phone);
     _email = TextEditingController(text: currentUser.email);
     storageRef = currentUser.img;
+    print(storageRef);
     return true;
   }
 
@@ -213,19 +216,24 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                 child: CircleAvatar(
                                   radius: 55,
                                   backgroundColor: const Color(0xffFDCF09),
-                                  child: storageRef != null
-                                      ? Image.network(storageRef)
-                                      : Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius: BorderRadius.circular(50)),
-                                    width: 100,
-                                    height: 100,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey[800],
-                                    ),
-                                  ),
+                                  child: photo != null
+                                      ? Image.file(
+                                          photo!,
+                                          width: 100,
+                                          height: 500,
+                                          fit: BoxFit.fitHeight,
+                                        )
+                                      : Image.network(storageRef) /*Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(50)),
+                                        width: 100,
+                                        height: 100,
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.grey[800],
+                                        ),
+                                  ),*/
                                 ),
                               ),
                             )
@@ -422,8 +430,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                             0, 0, 0, 20),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            uploadFile();
-                                            var response = await UsersCrud.updateUser(userID: locator<AuthService>().userID, name: _name!.text, phone: _phone!.text, email:_email!.text, img: 'img');
+                                            await uploadFile();
+                                            var response = await UsersCrud.updateUser(userID: locator<AuthService>().userID, name: _name!.text, phone: _phone!.text, email:_email!.text, img: newImage);
                                             if(response.code != 200)
                                             {
                                               // ignore: use_build_context_synchronously
