@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "659328514030",
+    "firebase_url": "https://bazarypico-default-rtdb.firebaseio.com",
+    "project_id": "bazarypico",
+    "storage_bucket": "bazarypico.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659328514030:android:5b99c584b88ec30f4900ff",
+        "android_client_info": {
+          "package_name": "com.example.bazar_y_pico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659328514030-jgs79gn5jbuh563b3fh7p29vv53smlc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArnPBwNX4tEQWWcxOQII36c-6KH-4jzPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659328514030-jgs79gn5jbuh563b3fh7p29vv53smlc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
