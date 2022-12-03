@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bazar_y_pico/Services/Auth_service.dart';
 import 'package:bazar_y_pico/Services/users_service.dart';
 import 'package:bazar_y_pico/locator.dart';
@@ -13,6 +15,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../main.dart';
 import '../welcome/welcome_widget.dart';
+
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart';
+import 'dart:io';
+
 
 class EditProfileWidget extends StatefulWidget {
   const EditProfileWidget({Key? key}) : super(key: key);
@@ -58,6 +66,12 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  var storageRef;
+  late var urlUserImage = '';
+  File? photo;
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -70,13 +84,60 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
   }
 
+
+  Future imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imgFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future uploadFile() async {
+    if (photo == null) return;
+    final fileName = basename(photo!.path);
+    //storageRef = basename(photo!.path).toString();
+
+    final destination = 'files/$fileName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('file/');
+
+      await ref.putFile(photo!);
+      var download = await ref.getDownloadURL();
+      storageRef = download.toString();
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
   Future<bool> setUserData() async{
 
     User currentUser =  await UsersCrud.getUser(userID: locator<AuthService>().userID);
     _name = TextEditingController(text: currentUser.name);
     _phone = TextEditingController(text: currentUser.phone);
     _email = TextEditingController(text: currentUser.email);
-
+    storageRef = currentUser.img;
     return true;
   }
 
@@ -127,29 +188,60 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
             key: formKey,
             autovalidateMode: AutovalidateMode.always,
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+              child: FutureBuilder<bool>(
+                  future: setUserData(),
+                  builder: (context, AsyncSnapshot<bool> snapshot)
+                  {
+                    if(snapshot.connectionState == ConnectionState.waiting)
+                    {
+                      return const Text('Cargando');
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
-                            child: FutureBuilder<bool>(
-                              future: setUserData(),
-                              builder: (context, AsyncSnapshot<bool> snapshot)
-                              {
-                                if(snapshot.connectionState == ConnectionState.waiting)
-                                {
-                                  return const Text('Cargando');
-                                }
-                                  return Column(
+                        Column(
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  _showPicker(context);
+                                },
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundColor: const Color(0xffFDCF09),
+                                  child: storageRef != null
+                                      ? Image.network(storageRef)
+                                      : Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(50)),
+                                    width: 100,
+                                    height: 100,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey[800],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
+                                  child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
@@ -330,6 +422,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                             0, 0, 0, 20),
                                         child: FFButtonWidget(
                                           onPressed: () async {
+                                            uploadFile();
                                             var response = await UsersCrud.updateUser(userID: locator<AuthService>().userID, name: _name!.text, phone: _phone!.text, email:_email!.text, img: 'img');
                                             if(response.code != 200)
                                             {
@@ -397,15 +490,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                             }
                                             // ignore: use_build_context_synchronously
                                             await Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                type: PageTransitionType.fade,
-                                                duration:
-                                                const Duration(milliseconds: 300),
-                                                reverseDuration:
-                                                const Duration(milliseconds: 300),
-                                                child: const WelcomeWidget()
-                                              )
+                                                context,
+                                                PageTransition(
+                                                    type: PageTransitionType.fade,
+                                                    duration:
+                                                    const Duration(milliseconds: 300),
+                                                    reverseDuration:
+                                                    const Duration(milliseconds: 300),
+                                                    child: const WelcomeWidget()
+                                                )
                                             );
                                           },
                                           text: 'Eliminar cuenta',
@@ -431,15 +524,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                         'buttonOnPageLoadAnimation']!),
                                       ),
                                     ],
-                                  );
-                                }
-                            ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
               ),
             ),
           ),
@@ -447,4 +540,33 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       ),
     );
   }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Gallery'),
+                    onTap: () {
+                      imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
 }
