@@ -6,6 +6,7 @@ import '../change_password/change_password_widget.dart';
 import '../edit_profile/edit_profile_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';
@@ -297,10 +298,35 @@ class _ProfileWidgetState extends State<ProfileWidget>
                             alignment: const AlignmentDirectional(0.05, 0),
                             child: Padding(
                               padding:
-                                  const EdgeInsetsDirectional.fromSTEB(0, 360, 0, 20),
+                                  const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                               child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
+                                onPressed: () async {
+                                  var response = await UsersCrud.logOut(userID: locator<AuthService>().userID);
+                                  if(response.code != 200)
+                                  {
+                                    // ignore: use_build_context_synchronously
+                                    return showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return const AlertDialog(
+                                            content: Text('Error al cerrar sesión'),
+                                          );
+                                        });
+                                  }
+                                  // ignore: use_build_context_synchronously
+                                  await Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.fade,
+                                        duration:
+                                        const Duration(milliseconds: 300),
+                                        reverseDuration:
+                                        const Duration(milliseconds: 300),
+                                        child: const NavBarPage(
+                                            initialPage: 'Welcome'),
+                                      ),
+                                  );
+                                  //print('Button pressed ...');
                                 },
                                 text: 'Cerrar Sesión',
                                 options: FFButtonOptions(

@@ -444,7 +444,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                                   });
                                             }
                                             // ignore: use_build_context_synchronously
-                                            await Navigator.push(
+                                            await Navigator.pushReplacement(
                                               context,
                                               PageTransition(
                                                 type: PageTransitionType.fade,

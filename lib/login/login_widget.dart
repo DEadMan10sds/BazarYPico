@@ -1,5 +1,4 @@
 import 'package:bazar_y_pico/Services/users_service.dart';
-import 'package:bazar_y_pico/locator.dart';
 
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_theme.dart';

@@ -1,4 +1,3 @@
-
 import 'package:bazar_y_pico/Services/Auth_service.dart';
 import 'package:bazar_y_pico/locator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -81,6 +80,7 @@ class UsersCrud {
         var existsEmail = await _Collection.where('email', isEqualTo: email).get();
         if(existsEmail.docs.isNotEmpty)
         {
+          print('Password: $password ////// UserPass: ${existsEmail.docs[0]['password']}');
           var passwordMatches = Crypt(existsEmail.docs[0]['password']).match(password);
           if(!passwordMatches)
             {
@@ -186,8 +186,9 @@ class UsersCrud {
         return response;
       }
 
+      var hashedPassword = Crypt.sha256(newPassword).toString();
       Map<String, dynamic> userDataUpdated = <String, dynamic>{
-        'password': newPassword,
+        'password': hashedPassword,
       };
 
       await  _Collection.doc(userID).update(userDataUpdated);
@@ -220,4 +221,19 @@ class UsersCrud {
       return response;
     }
 
+    ///TODO: Review why on logOut shows error 0<=currentIndex is not true
+    static Future<Response> logOut({
+      required userID
+    }) async {
+      Response response = Response();
+
+      locator<AuthService>().userID = null;
+      locator<AuthService>().authenticated = false;
+      locator<AuthService>().bazaars = [];
+
+      response.code = 200;
+      response.message = 'Sesión terminada';
+
+      return response;
+    }
 }
