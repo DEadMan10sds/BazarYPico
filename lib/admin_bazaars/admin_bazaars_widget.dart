@@ -1,13 +1,19 @@
+import 'package:bazar_y_pico/Services/Auth_service.dart';
+import 'package:bazar_y_pico/Services/bazaar_service.dart';
+import 'package:bazar_y_pico/components/bazar_widget.dart';
+import 'package:bazar_y_pico/index.dart';
+
+import 'package:bazar_y_pico/locator.dart';
+import '../Models/Bazar.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../main.dart';
 
 class AdminBazaarsWidget extends StatefulWidget {
   const AdminBazaarsWidget({Key? key}) : super(key: key);
@@ -33,8 +39,8 @@ class _AdminBazaarsWidgetState extends State<AdminBazaarsWidget>
           curve: Curves.easeInOut,
           delay: 250.ms,
           duration: 600.ms,
-          begin: Offset(0, 64),
-          end: Offset(0, 0),
+          begin: const Offset(0, 64),
+          end: const Offset(0, 0),
         ),
         ScaleEffect(
           curve: Curves.easeInOut,
@@ -47,6 +53,8 @@ class _AdminBazaarsWidgetState extends State<AdminBazaarsWidget>
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late List<Bazar> myBazaars = [];
+
 
   @override
   void initState() {
@@ -59,149 +67,115 @@ class _AdminBazaarsWidgetState extends State<AdminBazaarsWidget>
     );
   }
 
+  Future<bool> getMyBazaars() async {
+    myBazaars = await BazarService.getMyBazaars(userID: locator<AuthService>().userID);
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          buttonSize: 48,
-          icon: Icon(
-            Icons.chevron_left_rounded,
-            color: Colors.white,
-            size: 30,
+    return WillPopScope(
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            buttonSize: 48,
+            icon: const Icon(
+              Icons.chevron_left_rounded,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () async {
+              Navigator.pushReplacement(context, PageTransition(
+                type: PageTransitionType.fade,
+                duration:
+                const Duration(milliseconds: 300),
+                reverseDuration:
+                const Duration(milliseconds: 300),
+                child: const NavBarPage(
+                    initialPage: 'Bazaars'),
+              ));
+            },
           ),
-          onPressed: () async {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          'Administrar bazares',
-          style: FlutterFlowTheme.of(context).title2.override(
-                fontFamily: 'Raleway',
-                color: Colors.white,
-              ),
-        ),
-        actions: [],
-        centerTitle: false,
-        elevation: 0,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              primary: false,
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4,
-                          color: Color(0x32000000),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Hero(
-                          tag: 'productShoe',
-                          transitionOnUserGestures: true,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(0),
-                              bottomRight: Radius.circular(0),
-                              topLeft: Radius.circular(8),
-                              topRight: Radius.circular(8),
-                            ),
-                            child: Image.asset(
-                              'assets/images/image.jpg',
-                              width: double.infinity,
-                              height: 190,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 12, 16, 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 10),
-                                  child: Text(
-                                    '[Nombre de bazar]',
-                                    style: FlutterFlowTheme.of(context)
-                                        .title3
-                                        .override(
-                                          fontFamily: 'Raleway',
-                                          color: Color(0xFF2C2C2C),
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
-                  child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Crear nuevo bazar',
-                    icon: Icon(
-                      Icons.add,
-                      size: 15,
-                    ),
-                    options: FFButtonOptions(
-                      width: 350,
-                      height: 45,
-                      color: FlutterFlowTheme.of(context).secondaryColor,
-                      textStyle: FlutterFlowTheme.of(context)
-                          .subtitle2
-                          .override(
-                            fontFamily: 'Raleway',
-                            color: FlutterFlowTheme.of(context).primaryBtnText,
-                          ),
-                      elevation: 3,
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ).animateOnPageLoad(
-                      animationsMap['buttonOnPageLoadAnimation']!),
-                ),
-              ],
+          title: Text(
+            'Administrar bazares',
+            style: FlutterFlowTheme.of(context).title2.override(
+              fontFamily: 'Raleway',
+              color: Colors.white,
             ),
           ),
-        ],
-      ),
-    );
+          actions: const [],
+          centerTitle: false,
+          elevation: 0,
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+              child: FFButtonWidget(
+                onPressed: () async {
+                  await Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const AddBazaarWidget(),
+                  ),
+                  );
+                },
+                text: 'Crear nuevo bazar',
+                icon: const Icon(
+                  Icons.add,
+                  size: 15,
+                ),
+                options: FFButtonOptions(
+                  width: 350,
+                  height: 45,
+                  color: FlutterFlowTheme.of(context).secondaryColor,
+                  textStyle: FlutterFlowTheme.of(context)
+                      .subtitle2
+                      .override(
+                    fontFamily: 'Raleway',
+                    color: FlutterFlowTheme.of(context).primaryBtnText,
+                  ),
+                  elevation: 3,
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ).animateOnPageLoad(
+                  animationsMap['buttonOnPageLoadAnimation']!),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+              child:
+              FutureBuilder<bool>(
+                  future: getMyBazaars(),
+                  builder: (context, AsyncSnapshot<bool> snapshot)
+                  {
+                    if(snapshot.connectionState == ConnectionState.waiting) return const Text('Tus bazares se están cargando');
+                    if(myBazaars.isNotEmpty)
+                    {
+                      return ListView(
+                            padding: EdgeInsets.zero,
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            children: 
+                              List.generate(myBazaars.length, (index) => BazarWidget(myBazaars[index])),
+
+                      );
+                    }
+                    return const Text('No tienes bazares');
+                  }
+              ),
+            ),
+          ],
+        ),
+    ), onWillPop: () => Future.value(false));
   }
 }

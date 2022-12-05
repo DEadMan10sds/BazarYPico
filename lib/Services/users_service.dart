@@ -28,7 +28,6 @@ class UsersCrud {
         'password': hashedPassword.toString(),
         'phone': phone,
         'img': 'https://firebasestorage.googleapis.com/v0/b/bazarypico.appspot.com/o/user-128.png?alt=media&token=7e942d70-3617-4f94-9319-5f0009b9375e',
-        'bazaars': []
       };
 
     //Validación de formato de email -> Fuente: stackOverflow, No, no manejo
@@ -117,7 +116,7 @@ class UsersCrud {
       required userID
     }) async {
       var userFound = await _Collection.doc(userID).get();
-      User usr = User(name:userFound['name'],email: userFound['email'], phone: userFound['phone'], img: userFound['img'], bazaars: userFound['bazaars']);//userFound[0].data() as User;
+      User usr = User(name:userFound['name'],email: userFound['email'], phone: userFound['phone'], img: userFound['img']);//userFound[0].data() as User;
       //print(usr.toJson());
       return usr;
     }
@@ -209,7 +208,6 @@ class UsersCrud {
       await documentReferencer.delete().whenComplete(() => {
         locator<AuthService>().userID = null,
         locator<AuthService>().authenticated = false,
-        locator<AuthService>().bazaars = [],
         response.code = 200,
         response.message = 'Cuenta eliminada'
       }).catchError((error)=> {
@@ -229,7 +227,6 @@ class UsersCrud {
 
       locator<AuthService>().userID = null;
       locator<AuthService>().authenticated = false;
-      locator<AuthService>().bazaars = [];
 
       response.code = 200;
       response.message = 'Sesión terminada';

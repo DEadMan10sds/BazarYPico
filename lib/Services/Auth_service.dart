@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthService {
   //Declare variable
   late var authenticated = false;
-  late var bazaars = [];
+  late var bazarSelected;
   late var userID;
   /*
   * PENDING

@@ -1,9 +1,10 @@
+import 'package:bazar_y_pico/Models/Bazar.dart';
+import 'package:bazar_y_pico/Services/bazaar_service.dart';
+
+import '../components/bazar_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class BazaarsWidget extends StatefulWidget {
   const BazaarsWidget({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class BazaarsWidget extends StatefulWidget {
 class _BazaarsWidgetState extends State<BazaarsWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  late List<Bazar> allBazars;
 
   @override
   void initState() {
@@ -28,6 +31,13 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
     super.dispose();
   }
 
+  Future<bool> getAllBazaars() async {
+    allBazars = await BazarService.getAllBazaars();
+    print( 'BAAAAAAAAAAAAAAAAAAAAAAAAA ${allBazars[0].name}');
+    return true;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -35,52 +45,51 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Container(
-                width: double.infinity,
-                height: 250,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).primaryColor,
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 3,
-                      color: Color(0x39000000),
-                      offset: Offset(0, 2),
-                    )
-                  ],
-                ),
-                child: Column(
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 250,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 3,
+                        color: Color(0x39000000),
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                  ),child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(24, 40, 0, 0),
                       child: Image.asset(
-                        'assets/images/LOGO4.png',
-                        width: 160,
-                        height: 50,
-                        fit: BoxFit.fitWidth,
+                          'assets/images/LOGO4.png',
+                          width: 160,
+                          height: 50,
+                          fit: BoxFit.fitWidth,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Bienvenido',
-                            style: FlutterFlowTheme.of(context).title1.override(
-                              fontFamily: 'Raleway',
-                              color:
-                              FlutterFlowTheme.of(context).secondaryColor,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bienvenido',
+                              style: FlutterFlowTheme.of(context).title1.override(
+                                fontFamily: 'Raleway',
+                                color:
+                                FlutterFlowTheme.of(context).secondaryColor,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
+                      Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -97,8 +106,8 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                      Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 10),
                       child: Container(
                         width: double.infinity,
                         height: 60,
@@ -166,7 +175,7 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
                                 ),
                               ),
                             ),
-                            Padding(
+                            /*Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () {
@@ -192,90 +201,31 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
                                   borderRadius: BorderRadius.circular(50),
                                 ),
                               ),
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                      child: ListView(
-                        padding: EdgeInsets.zero,
-                        primary: false,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 4,
-                                    color: Color(0x32000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Hero(
-                                    tag: 'productShoe',
-                                    transitionOnUserGestures: true,
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(0),
-                                        bottomRight: Radius.circular(0),
-                                        topLeft: Radius.circular(8),
-                                        topRight: Radius.circular(8),
-                                      ),
-                                      child: Image.asset(
-                                        'assets/images/image.jpg',
-                                        width: double.infinity,
-                                        height: 190,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        16, 12, 16, 8),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 10),
-                                            child: Text(
-                                              '[Nombre de bazar]',
-                                              style: FlutterFlowTheme.of(context)
-                                                  .title3
-                                                  .override(
-                                                fontFamily: 'Raleway',
-                                                color: const Color(0xFF2C2C2C),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                Expanded(
+                    child: FutureBuilder<bool>(
+                      future: getAllBazaars(),
+                      builder: (context, AsyncSnapshot<bool> snapshot)
+                      {
+                        if(snapshot.connectionState == ConnectionState.waiting)
+                        {
+                          return const Text('cargando bazares');
+                        }
+                        return ListView(
+                            children:
+                            List.generate(allBazars.length, (index) => BazarWidget(allBazars[index]))
+                        );
+                      },
+                    )
+                )
+              ]
             ),
           ),
         ),

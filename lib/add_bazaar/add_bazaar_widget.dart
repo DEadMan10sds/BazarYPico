@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:bazar_y_pico/Services/bazaar_service.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -7,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import '../main.dart';
 
 class AddBazaarWidget extends StatefulWidget {
   const AddBazaarWidget({Key? key}) : super(key: key);
@@ -32,8 +41,8 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
           curve: Curves.easeInOut,
           delay: 250.ms,
           duration: 600.ms,
-          begin: Offset(0, 64),
-          end: Offset(0, 0),
+          begin: const Offset(0, 64),
+          end: const Offset(0, 0),
         ),
         ScaleEffect(
           curve: Curves.easeInOut,
@@ -45,10 +54,17 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
       ],
     ),
   };
-  TextEditingController? textController1;
+  TextEditingController? _name;
   TextEditingController? textController2;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  late var storageRef = 'https://firebasestorage.googleapis.com/v0/b/bazarypico.appspot.com/o/files%2Fa.jpg?alt=media&token=6d8b1fc1-5fad-411e-a8ac-b27244437bc5';
+  late var newImage = null;
+  late var urlUserImage = '';
+  File? photo;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -60,16 +76,64 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
       this,
     );
 
-    textController1 = TextEditingController();
+    _name = TextEditingController();
     textController2 = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
+    _name?.dispose();
     textController2?.dispose();
     super.dispose();
   }
+
+  Future imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imgFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future uploadFile() async {
+    if (photo == null) return;
+    final fileName = basename(photo!.path);
+    //storageRef = basename(photo!.path).toString();
+
+    final destination = 'bazaars/$fileName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('file/');
+
+      await ref.putFile(photo!);
+      var download = await ref.getDownloadURL();
+      newImage = download.toString();
+      print(newImage);
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +147,7 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
           borderColor: Colors.transparent,
           borderRadius: 30,
           buttonSize: 48,
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left_rounded,
             color: Colors.white,
             size: 30,
@@ -99,7 +163,6 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                 color: Colors.white,
               ),
         ),
-        actions: [],
         centerTitle: false,
         elevation: 0,
       ),
@@ -118,46 +181,31 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 3),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 250,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFACACAC),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                buttonSize: 48,
-                                icon: Icon(
-                                  Icons.photo_camera,
-                                  color: Colors.white,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
-                              ),
-                              Text(
-                                'Añadir portada',
-                                style: GoogleFonts.getFont(
-                                  'Raleway',
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                              _showPicker(context);
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 250,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFACACAC),
+                            ),
+                            child: photo != null
+                                ? Image.file(
+                              photo!,
+                              width: 100,
+                              height: 500,
+                              fit: BoxFit.fitHeight,
+                              )
+                                : Image.network(storageRef),
                       ),
-                    ],
+                      ))
+                    ]
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -165,12 +213,12 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                         Expanded(
                           child: Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
+                                const EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: Text(
                                     'Datos de bazar',
@@ -178,15 +226,15 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                         .title1
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF2C2C2C),
+                                          color: const Color(0xFF2C2C2C),
                                         ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
-                                    controller: textController1,
+                                    controller: _name,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Nombre de bazar',
@@ -195,7 +243,7 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
+                                            color: const Color(0x9AFFFFFF),
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -214,14 +262,14 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
@@ -239,8 +287,8 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                         FlutterFlowTheme.of(context).bodyText1,
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                /*Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
                                     controller: textController2,
@@ -252,7 +300,7 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
+                                            color: const Color(0x9AFFFFFF),
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -271,14 +319,14 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
@@ -286,7 +334,7 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                       ),
                                       filled: true,
                                       fillColor: Colors.white,
-                                      prefixIcon: Icon(
+                                      prefixIcon: const Icon(
                                         Icons.notes,
                                         color: Color(0xFF0F596B),
                                         size: 0,
@@ -297,13 +345,39 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                     maxLines: 5,
                                     keyboardType: TextInputType.multiline,
                                   ),
-                                ),
+                                )*/
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: FFButtonWidget(
-                                    onPressed: () {
-                                      print('Button pressed ...');
+                                    onPressed: () async {
+                                      await uploadFile();
+                                      var result = await BazarService.addBazar(name: _name!.text, img: newImage);
+                                      if(result.code != 200)
+                                      {
+                                        // ignore: use_build_context_synchronously
+                                        return showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(result.message.toString()),
+                                              );
+                                            });
+                                      }
+                                      // ignore: use_build_context_synchronously
+                                      await Navigator.pushReplacement(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.fade,
+                                          duration:
+                                          const Duration(milliseconds: 300),
+                                          reverseDuration:
+                                          const Duration(milliseconds: 300),
+                                          child: const NavBarPage(
+                                              initialPage: 'Bazaars'),
+                                        ),
+                                      );
+                                      //print('Button pressed ...');
                                     },
                                     text: 'Crear bazar',
                                     options: FFButtonOptions(
@@ -319,7 +393,7 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
                                                 .primaryBtnText,
                                           ),
                                       elevation: 3,
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Colors.transparent,
                                         width: 1,
                                       ),
@@ -342,5 +416,33 @@ class _AddBazaarWidgetState extends State<AddBazaarWidget>
         ),
       ),
     );
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Gallery'),
+                    onTap: () {
+                      imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
