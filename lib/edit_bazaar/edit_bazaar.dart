@@ -64,7 +64,6 @@ class _EditBazaarWidgetState extends State<EditBazaarWidget>
   File? photo;
   final ImagePicker _picker = ImagePicker();
 
-  late Bazar editingBazar;
 
   @override
   void initState() {
@@ -78,11 +77,7 @@ class _EditBazaarWidgetState extends State<EditBazaarWidget>
     //textController2 = TextEditingController();
   }
 
-  @override
-  void dispose() {
-    _name?.dispose();
-    super.dispose();
-  }
+
 
   Future imgFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -132,11 +127,17 @@ class _EditBazaarWidgetState extends State<EditBazaarWidget>
   }
 
   Future<bool> getBazarData() async {
-    print(locator<AuthService>().bazarSelected);
-    editingBazar = await BazarService.getOne(bazarID: locator<AuthService>().bazarSelected);
+    //print(locator<AuthService>().bazarSelected);
+    Bazar editingBazar = await BazarService.getOne(bazarID: locator<AuthService>().bazarSelected);
     _name = TextEditingController(text: editingBazar.name);
     newImage = editingBazar.img;
     return true;
+  }
+
+  @override
+  void dispose() {
+    _name?.dispose();
+    super.dispose();
   }
 
   @override
@@ -210,7 +211,7 @@ class _EditBazaarWidgetState extends State<EditBazaarWidget>
                                       height: 500,
                                       fit: BoxFit.fitHeight,
                                     )
-                                        : Image.network(editingBazar.img.toString()),
+                                        : Image.network(newImage),
                                   ),
                                 ))
                           ]

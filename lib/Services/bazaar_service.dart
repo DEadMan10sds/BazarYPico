@@ -94,5 +94,21 @@ class BazarService {
     return response;
   }
 
+  static Future<Response> delete({
+    required bazarID
+  }) async {
+    Response response = Response();
+
+    await _Collection.doc(bazarID).delete().whenComplete((){
+      response.code = 200;
+      response.message = 'Bazar eliminado';
+    }).catchError((e) {
+      response.code = 500;
+      response.message = e;
+    });
+
+    return response;
+
+  }
 
 }

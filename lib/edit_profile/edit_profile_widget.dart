@@ -141,7 +141,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     _email = TextEditingController(text: currentUser.email);
     storageRef = currentUser.img;
     newImage = currentUser.img;
-    print(storageRef);
+    //print(storageRef);
     return true;
   }
 
@@ -224,17 +224,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                                           height: 500,
                                           fit: BoxFit.fitHeight,
                                         )
-                                      : Image.network(storageRef) /*Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius: BorderRadius.circular(50)),
-                                        width: 100,
-                                        height: 100,
-                                        child: Icon(
-                                          Icons.camera_alt,
-                                          color: Colors.grey[800],
-                                        ),
-                                  ),*/
+                                      : Image.network(storageRef)
                                 ),
                               ),
                             )
