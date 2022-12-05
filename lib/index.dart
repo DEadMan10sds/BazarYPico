@@ -14,3 +14,4 @@ export 'add_bazaar/add_bazaar_widget.dart' show AddBazaarWidget;
 export 'preview_products/preview_products_widget.dart'
     show PreviewProductsWidget;
 export 'add_products/add_products_widget.dart' show AddProductsWidget;
+export 'edit_bazaar/edit_bazaar.dart' show EditBazaarWidget;

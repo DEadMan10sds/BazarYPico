@@ -1,4 +1,6 @@
 
+import 'dart:core';
+
 import 'package:bazar_y_pico/Models/Bazar.dart';
 import 'package:bazar_y_pico/Services/Auth_service.dart';
 import 'package:bazar_y_pico/locator.dart';
@@ -67,7 +69,30 @@ class BazarService {
     });
 
     return response;
-
   }
+
+  static Future<Response> editBazar({
+    required String bazarID,
+    required String img,
+    required String name,
+  }) async {
+    Response response =  Response();
+
+    Map<String, dynamic> data = <String, dynamic> {
+      'name': name,
+      'img': img
+    };
+
+    await _Collection.doc(bazarID).update(data).whenComplete((){
+      response.code = 200;
+      response.message = 'Edicion completa';
+    }).catchError((e) {
+      response.code = 500;
+      response.message = e;
+    });
+
+    return response;
+  }
+
 
 }

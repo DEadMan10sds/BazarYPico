@@ -2,6 +2,7 @@ import 'package:bazar_y_pico/Services/Auth_service.dart';
 import 'package:bazar_y_pico/index.dart';
 
 import '../Models/Bazar.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class BazarWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Hero(
-                tag: 'productShoe',
+                tag: _bazar.name.toString(),
                 transitionOnUserGestures: true,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
@@ -90,6 +91,42 @@ class BazarWidget extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if(_bazar.owner == locator<AuthService>().userID)
+                      FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 30,
+                        borderWidth: 1,
+                        buttonSize: 60,
+                        icon: Icon(
+                          Icons.edit,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          size: 30,
+                        ),
+                        onPressed: () async {
+                          locator<AuthService>().bazarSelected = _bazar.id;
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditBazaarWidget(),
+                            ),
+                          );
+                        },
+                      ),
+                    if(_bazar.owner == locator<AuthService>().userID)
+                      FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 30,
+                        borderWidth: 1,
+                        buttonSize: 60,
+                        icon: Icon(
+                          Icons.delete,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          print('IconButton pressed ...');
+                        },
+                      ),
                   ],
                 ),
               ),

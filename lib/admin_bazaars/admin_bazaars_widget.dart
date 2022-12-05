@@ -150,10 +150,10 @@ class _AdminBazaarsWidgetState extends State<AdminBazaarsWidget>
               ).animateOnPageLoad(
                   animationsMap['buttonOnPageLoadAnimation']!),
             ),
-            Padding(
+            Expanded(
+              child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-              child:
-              FutureBuilder<bool>(
+              child: FutureBuilder<bool>(
                   future: getMyBazaars(),
                   builder: (context, AsyncSnapshot<bool> snapshot)
                   {
@@ -161,18 +161,19 @@ class _AdminBazaarsWidgetState extends State<AdminBazaarsWidget>
                     if(myBazaars.isNotEmpty)
                     {
                       return ListView(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            children: 
-                              List.generate(myBazaars.length, (index) => BazarWidget(myBazaars[index])),
+                        padding: EdgeInsets.zero,
+                        primary: false,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children:
+                        List.generate(myBazaars.length, (index) => BazarWidget(myBazaars[index])),
 
                       );
                     }
                     return const Text('No tienes bazares');
                   }
               ),
+            ),
             ),
           ],
         ),

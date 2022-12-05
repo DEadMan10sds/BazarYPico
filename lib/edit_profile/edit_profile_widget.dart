@@ -140,6 +140,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     _phone = TextEditingController(text: currentUser.phone);
     _email = TextEditingController(text: currentUser.email);
     storageRef = currentUser.img;
+    newImage = currentUser.img;
     print(storageRef);
     return true;
   }
