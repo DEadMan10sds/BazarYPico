@@ -1,5 +1,16 @@
+import 'package:bazar_y_pico/Services/ProductCRUD.dart';
+import 'package:bazar_y_pico/add_products/add_products_widget.dart';
+import 'package:bazar_y_pico/description/description_widget.dart';
+
+import '../Services/Auth_service.dart';
+import '../edit_product/edit_product.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
+
+import '../flutter_flow/flutter_flow_util.dart';
+import '../locator.dart';
+import '../main.dart';
 
 /*class ProductWidget extends StatefulWidget {
   const ProductWidget({Key? key}) : super(key: key);
@@ -10,19 +21,26 @@ import 'package:flutter/material.dart';
 
 class ProductWidgetState extends StatelessWidget{
 
-  ProductWidgetState(this.name, this.img, this.productID, this.unitPrice, this.stock);
+  ProductWidgetState(this.name, this.img, this._productID, this.unitPrice, this.stock, this.owner);
 
   final String name;
   final String img;
   final String stock;
-  final String productID;
+  final String _productID;
   final String unitPrice;
+  final String owner;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        print(productID);
+        locator<AuthService>().productSelected = _productID;
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => const DescriptionWidget(),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
@@ -71,8 +89,7 @@ class ProductWidgetState extends StatelessWidget{
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding:
-                            const EdgeInsetsDirectional.fromSTEB(8, 12, 16, 0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(8, 12, 16, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment:
@@ -90,6 +107,67 @@ class ProductWidgetState extends StatelessWidget{
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                                if(owner == locator<AuthService>().userID)
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 10,
+                                    borderWidth: 1,
+                                    buttonSize: 40,
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: FlutterFlowTheme.of(context).primaryColor,
+                                      size: 25,
+                                    ),
+                                    onPressed: () async {
+                                      locator<AuthService>().bazarSelected = _productID;
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const EditProductsWidget(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                if(owner == locator<AuthService>().userID)
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 10,
+                                    borderWidth: 1,
+                                    buttonSize: 40,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: FlutterFlowTheme.of(context).primaryColor,
+                                      size: 25,
+                                    ),
+                                    onPressed: () async {
+                                      var response = await ProductCRUD.delete(productID: _productID);
+                                      if(response.code != 200)
+                                      {
+                                        // ignore: use_build_context_synchronously
+                                        return showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(response.message.toString()),
+                                              );
+                                            });
+                                      }
+                                      //print('IconButton pressed ...');
+                                      // ignore: use_build_context_synchronously
+                                      await Navigator.pushReplacement(
+                                        context,
+                                        PageTransition(
+                                          type: PageTransitionType.fade,
+                                          duration:
+                                          const Duration(milliseconds: 300),
+                                          reverseDuration:
+                                          const Duration(milliseconds: 300),
+                                          child: const NavBarPage(
+                                              initialPage: 'Bazaars'),
+                                        ),
+                                      );
+                                    },
+                                  ),
                               ],
                             ),
                           ),

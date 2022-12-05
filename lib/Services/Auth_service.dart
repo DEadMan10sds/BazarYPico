@@ -5,6 +5,7 @@ class AuthService {
   //Declare variable
   late var authenticated = false;
   late var bazarSelected;
+  late var productSelected;
   late var userID;
   /*
   * PENDING

@@ -227,6 +227,7 @@ class UsersCrud {
 
       locator<AuthService>().userID = null;
       locator<AuthService>().authenticated = false;
+      locator<AuthService>().bazarSelected = null;
 
       response.code = 200;
       response.message = 'Sesión terminada';

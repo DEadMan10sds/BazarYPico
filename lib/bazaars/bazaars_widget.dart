@@ -33,7 +33,7 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
 
   Future<bool> getAllBazaars() async {
     allBazars = await BazarService.getAllBazaars();
-    print( 'BAAAAAAAAAAAAAAAAAAAAAAAAA ${allBazars[0].name}');
+    //print( 'BAAAAAAAAAAAAAAAAAAAAAAAAA ${allBazars[0].name}');
     return true;
   }
 

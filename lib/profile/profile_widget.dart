@@ -314,7 +314,7 @@ class _ProfileWidgetState extends State<ProfileWidget>
                                         });
                                   }
                                   // ignore: use_build_context_synchronously
-                                  await Navigator.pushReplacement(
+                                  await Navigator.push(
                                       context,
                                       PageTransition(
                                         type: PageTransitionType.fade,

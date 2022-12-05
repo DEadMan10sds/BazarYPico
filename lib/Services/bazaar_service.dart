@@ -43,7 +43,7 @@ class BazarService {
   }) async {
     var  bazarFound = await _Collection.doc(bazarID).get();
 
-    Bazar bzr = Bazar(name: bazarFound['name'], img: bazarFound['img']);
+    Bazar bzr = Bazar(owner: bazarFound['owner'], name: bazarFound['name'], img: bazarFound['img']);
 
     return bzr;
   }
@@ -108,7 +108,6 @@ class BazarService {
     });
 
     return response;
-
   }
 
 }

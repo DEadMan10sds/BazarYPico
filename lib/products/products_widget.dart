@@ -202,7 +202,7 @@ class _ProductsWidgetState extends State<ProductsWidget>
                         ),
                       ],
                     ),
-                    Align(
+                    if(_bazarData.owner == locator<AuthService>().userID) Align(
                       child: Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB( 0, 10, 0, 20),
                         child: FFButtonWidget(
@@ -242,23 +242,23 @@ class _ProductsWidgetState extends State<ProductsWidget>
                         ).animateOnPageLoad(animationsMap['buttonOnPageLoadAnimation1']!),
                       ),
                     ),
-                    Column(children: [
                       StreamBuilder(
                           stream: productsList,
                           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             if(snapshot.connectionState == ConnectionState.waiting) return const Text('Cargando productos...');
                             return ListView(
-                              physics: const AlwaysScrollableScrollPhysics(),
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
-                              children: snapshot.data!.docs.map((product) {
+                              children: //List.generate(100, (index) => const Text('data')),
+
+                              snapshot.data!.docs.map((product) {
                                 //return const Text('data');
-                                return ProductWidgetState(product['name'], product['img'], product.reference.id, product['unitPrice'], product['stock']);
+                                return ProductWidgetState(product['name'], product['img'], product.reference.id, product['unitPrice'], product['stock'], product['owner']);
                               }).toList(),
+
                             );
                           }
                       ),
-                    ]),
                     /*ListView(
                       padding: EdgeInsets.zero,
                       primary: false,

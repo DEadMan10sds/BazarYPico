@@ -7,8 +7,9 @@ class Product {
   String? description;
   String? img;
   String? bazar;
-  Float? unitPrice;
-  Int? stock;
+  String? unitPrice;
+  String? stock;
+  String? owner;
 
   Product({
     this.id,
@@ -17,7 +18,8 @@ class Product {
     this.img,
     this.bazar,
     this.stock,
-    this.unitPrice
+    this.unitPrice,
+    this.owner
   });
 
 }

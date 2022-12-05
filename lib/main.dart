@@ -85,7 +85,7 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'Bazaars': const BazaarsWidget(),
-      'Cart': const CartWidget(),
+      //'Cart': const CartWidget(),
       'AdminBazaars': const AdminBazaarsWidget(),
       'Profile': const ProfileWidget(),
     };
@@ -113,14 +113,14 @@ class _NavBarPageState extends State<NavBarPage> {
             label: 'Inicio',
             tooltip: '',
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(
               Icons.shopping_cart_rounded,
               size: 24,
             ),
             label: 'Carrito',
             tooltip: '',
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(
               Icons.storefront_sharp,
