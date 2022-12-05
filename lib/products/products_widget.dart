@@ -1,13 +1,20 @@
 import 'package:bazar_y_pico/Services/Auth_service.dart';
+import 'package:bazar_y_pico/Services/ProductCRUD.dart';
 import 'package:bazar_y_pico/Services/bazaar_service.dart';
-
+import 'package:bazar_y_pico/add_products/add_products_widget.dart';
+import 'package:bazar_y_pico/flutter_flow/flutter_flow_animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../Models/Bazar.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+import '../flutter_flow/flutter_flow_util.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
 import '../locator.dart';
+import '../components/product_widget.dart';
 
 class ProductsWidget extends StatefulWidget {
   const ProductsWidget({Key? key}) : super(key: key);
@@ -19,8 +26,64 @@ class ProductsWidget extends StatefulWidget {
 
 class _ProductsWidgetState extends State<ProductsWidget>
     with TickerProviderStateMixin {
+  final animationsMap = {
+    'buttonOnPageLoadAnimation1': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: 0,
+          end: 1,
+        ),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: const Offset(0, 64),
+          end: const Offset(0, 0),
+        ),
+        ScaleEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: 1,
+          end: 1,
+        ),
+      ],
+    ),
+    'buttonOnPageLoadAnimation2': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: 0,
+          end: 1,
+        ),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: const Offset(0, 64),
+          end: const Offset(0, 0),
+        ),
+        ScaleEffect(
+          curve: Curves.easeInOut,
+          delay: 250.ms,
+          duration: 600.ms,
+          begin: 1,
+          end: 1,
+        ),
+      ],
+    ),
+  };
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late Bazar _bazarData;
+  final Stream<QuerySnapshot> productsList = ProductCRUD.getProductsByBazar(bazarID: locator<AuthService>().bazarSelected);
 
   Future<bool> getBazarData() async {
 
@@ -139,151 +202,70 @@ class _ProductsWidgetState extends State<ProductsWidget>
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                      child: ListView(
-                        padding: EdgeInsets.zero,
-                        primary: false,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(16, 1, 16, 16),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 4,
-                                    color: Color(0x32000000),
-                                    offset: Offset(0, 2),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Container(
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      blurRadius: 5,
-                                      color: Color(0x1F000000),
-                                      offset: Offset(0, 2),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          4, 4, 4, 4),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.network(
-                                          'https://static.nike.com/a/images/f_auto,b_rgb:f5f5f5,w_880/e5e376f2-7b53-49fc-9720-0e1d69ff0fb9/zion-1-basketball-shoes-bJ0hLJ.png',
-                                          width: 120,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                                8, 12, 16, 0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '[Producto]',
-                                                  style: FlutterFlowTheme.of(
-                                                      context)
-                                                      .title3
-                                                      .override(
-                                                    fontFamily: 'Outfit',
-                                                    color: const Color(0xFF2C2C2C),
-                                                    fontSize: 20,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 16, 0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '[Categoria]',
-                                                  style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                    fontFamily: 'Outfit',
-                                                    color:
-                                                    const Color(0xFF2C2C2C),
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                    FontWeight.normal,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 16, 12),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  '\$120.00',
-                                                  style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .subtitle1
-                                                      .override(
-                                                    fontFamily: 'Outfit',
-                                                    color:
-                                                    FlutterFlowTheme.of(
-                                                        context)
-                                                        .secondaryColor,
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                    FontWeight.normal,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                    Align(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB( 0, 10, 0, 20),
+                        child: FFButtonWidget(
+                          onPressed:  () async {
+                            await Navigator.push(
+                                context,
+                                PageTransition(
+                                    type: PageTransitionType.fade,
+                                    duration:
+                                    const Duration(milliseconds: 300),
+                                    reverseDuration:
+                                    const Duration(milliseconds: 300),
+                                    child: const AddProductsWidget()
+                                )
+                            );
+                          },
+                          text: 'Añadir producto',
+                          options: FFButtonOptions(
+                            width: 280,
+                            height: 45,
+                            color: const Color(0xFFF3485B),
+                            textStyle: FlutterFlowTheme.of(context)
+                                .subtitle2
+                                .override(
+                              fontFamily: 'Raleway',
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
+                            elevation: 3,
+                            borderSide: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(50),
                           ),
-                        ],
+                        ).animateOnPageLoad(animationsMap['buttonOnPageLoadAnimation1']!),
                       ),
                     ),
+                    Column(children: [
+                      StreamBuilder(
+                          stream: productsList,
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if(snapshot.connectionState == ConnectionState.waiting) return const Text('Cargando productos...');
+                            return ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              children: snapshot.data!.docs.map((product) {
+                                //return const Text('data');
+                                return ProductWidgetState(product['name'], product['img'], product.reference.id, product['unitPrice'], product['stock']);
+                              }).toList(),
+                            );
+                          }
+                      ),
+                    ]),
+                    /*ListView(
+                      padding: EdgeInsets.zero,
+                      primary: false,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      children: List.generate(6, (index) => const Text('data')),
+                    ),*/
                   ],
                 );
               }

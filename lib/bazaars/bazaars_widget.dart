@@ -49,7 +49,7 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 190,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).primaryColor,
                     boxShadow: const [
@@ -106,7 +106,7 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
                         ],
                       ),
                     ),
-                      Padding(
+                      /*Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 10),
                       child: Container(
                         width: double.infinity,
@@ -205,7 +205,7 @@ class _BazaarsWidgetState extends State<BazaarsWidget> {
                           ],
                         ),
                       ),
-                    ),
+                    ),*/
                     ],
                   ),
                 ),

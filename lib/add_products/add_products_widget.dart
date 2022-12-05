@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:bazar_y_pico/Services/ProductCRUD.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -7,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class AddProductsWidget extends StatefulWidget {
   const AddProductsWidget({Key? key}) : super(key: key);
@@ -32,8 +40,8 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
           curve: Curves.easeInOut,
           delay: 250.ms,
           duration: 600.ms,
-          begin: Offset(0, 64),
-          end: Offset(0, 0),
+          begin: const Offset(0, 64),
+          end: const Offset(0, 0),
         ),
         ScaleEffect(
           curve: Curves.easeInOut,
@@ -45,13 +53,67 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
       ],
     ),
   };
-  TextEditingController? textController1;
-  TextEditingController? textController2;
-  TextEditingController? textController3;
-  TextEditingController? textController4;
-  TextEditingController? textController5;
+  TextEditingController? _name;
+  TextEditingController? _unitPrice;
+  TextEditingController? _stock;
+  TextEditingController? _description;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  late var storageRef = 'https://firebasestorage.googleapis.com/v0/b/bazarypico.appspot.com/o/p.jpg?alt=media&token=b078c66d-dbfe-4a34-bd7f-175683bc93ab';
+  late var newImage = null;
+  late var urlUserImage = '';
+  File? photo;
+  final ImagePicker _picker = ImagePicker();
+
+  Future imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imgFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        //uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future uploadFile() async {
+    if (photo == null) return;
+    final fileName = basename(photo!.path);
+    //storageRef = basename(photo!.path).toString();
+
+    final destination = 'bazaars/$fileName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('file/');
+
+      await ref.putFile(photo!);
+      var download = await ref.getDownloadURL();
+      newImage = download.toString();
+      print(newImage);
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
 
   @override
   void initState() {
@@ -63,20 +125,19 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
       this,
     );
 
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
-    textController3 = TextEditingController();
-    textController4 = TextEditingController();
-    textController5 = TextEditingController();
+    _name = TextEditingController();
+    _unitPrice = TextEditingController();
+    _stock = TextEditingController();
+    _description = TextEditingController();
+    newImage = storageRef;
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
-    textController3?.dispose();
-    textController4?.dispose();
-    textController5?.dispose();
+    _name?.dispose();
+    _unitPrice?.dispose();
+    _stock?.dispose();
+    _description?.dispose();
     super.dispose();
   }
 
@@ -92,7 +153,7 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
           borderColor: Colors.transparent,
           borderRadius: 30,
           buttonSize: 48,
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left_rounded,
             color: Colors.white,
             size: 30,
@@ -124,49 +185,34 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 3),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 250,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFACACAC),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                buttonSize: 48,
-                                icon: Icon(
-                                  Icons.photo_camera,
-                                  color: Colors.white,
-                                  size: 30,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                _showPicker(context);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 250,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFACACAC),
                                 ),
-                                onPressed: () {
-                                  print('IconButton pressed ...');
-                                },
+                                child: photo != null
+                                    ? Image.file(
+                                  photo!,
+                                  width: 100,
+                                  height: 500,
+                                  fit: BoxFit.fitHeight,
+                                )
+                                    : Image.network(storageRef),
                               ),
-                              Text(
-                                'Añadir portada',
-                                style: GoogleFonts.getFont(
-                                  'Raleway',
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                            ))
+                      ]
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -174,12 +220,12 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                         Expanded(
                           child: Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
+                                const EdgeInsetsDirectional.fromSTEB(24, 2, 24, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: Text(
                                     'Datos de producto',
@@ -187,15 +233,15 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                         .title1
                                         .override(
                                           fontFamily: 'Raleway',
-                                          color: Color(0xFF2C2C2C),
+                                          color: const Color(0xFF2C2C2C),
                                         ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
-                                    controller: textController1,
+                                    controller: _name,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Nombre de producto',
@@ -204,7 +250,7 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
+                                            color: const Color(0x9AFFFFFF),
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -223,14 +269,14 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
@@ -249,67 +295,10 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
-                                    controller: textController2,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Categoría',
-                                      hintText: 'cateoria',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodyText1
-                                          .override(
-                                            fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryColor,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF0000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0xFFFF0000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      prefixIcon: Icon(
-                                        Icons.format_list_bulleted,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryColor,
-                                      ),
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 20),
-                                  child: TextFormField(
-                                    controller: textController3,
+                                    controller: _unitPrice,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Precio',
@@ -318,7 +307,7 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
+                                            color: const Color(0x9AFFFFFF),
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -337,14 +326,14 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
@@ -366,10 +355,10 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
-                                    controller: textController4,
+                                    controller: _stock,
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -429,10 +418,10 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: TextFormField(
-                                    controller: textController5,
+                                    controller: _description,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Descripción',
@@ -441,7 +430,7 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Raleway',
-                                            color: Color(0x9AFFFFFF),
+                                            color: const Color(0x9AFFFFFF),
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -460,14 +449,14 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Color(0xFFFF0000),
                                           width: 1,
                                         ),
@@ -489,11 +478,25 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 0, 20),
                                   child: FFButtonWidget(
-                                    onPressed: () {
-                                      print('Button pressed ...');
+                                    onPressed: () async {
+                                      await uploadFile();
+                                      var result = await ProductCRUD.addProduct(name: _name!.text, description: _description!.text, img: newImage, stock: _stock!.text, unitPrice: _unitPrice!.text);
+                                      if(result.code != 200)
+                                      {
+                                        // ignore: use_build_context_synchronously
+                                        return showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(result.message.toString()),
+                                              );
+                                            });
+                                      }
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.pop(context);
                                     },
                                     text: 'Crear producto',
                                     options: FFButtonOptions(
@@ -509,7 +512,7 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
                                                 .primaryBtnText,
                                           ),
                                       elevation: 3,
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         color: Colors.transparent,
                                         width: 1,
                                       ),
@@ -532,5 +535,33 @@ class _AddProductsWidgetState extends State<AddProductsWidget>
         ),
       ),
     );
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Gallery'),
+                    onTap: () {
+                      imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
